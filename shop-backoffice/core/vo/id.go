@@ -3,8 +3,9 @@ package vo
 import (
 	"github.com/google/uuid"
 )
+
 type ID struct {
-	Value  uuid.UUID
+	Value uuid.UUID
 }
 
 func NewID() ID {

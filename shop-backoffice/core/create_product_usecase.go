@@ -11,10 +11,15 @@ type CreateProductUseCase struct {
 	persistProductOutputPort out.PersistProductOutputPort
 }
 
+func NewCreateProductUseCase(persistProductPort out.PersistProductOutputPort) CreateProductUseCase {
+	return CreateProductUseCase{
+		persistProductOutputPort: persistProductPort,
+	}
+}
+
 func (cp CreateProductUseCase) Execute(createProductParameter dto.CreateProductParameter) error {
 	product := factorys.ProductFactoryFromCreateProductParameter(createProductParameter)
 	product.UpdateProduct()
 	persistProductParameter := translators.FromProductEntityToPersistProductParameter(product)
-	err := cp.persistProductOutputPort.Execute(persistProductParameter)
-	return err
+	return cp.persistProductOutputPort.Execute(persistProductParameter)
 }

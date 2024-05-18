@@ -6,6 +6,8 @@ import (
 	"os"
 
 	"github.com/gin-gonic/gin"
+	"github.com/hugovallada/shop-poc/shop-backoffice/core"
+	"github.com/hugovallada/shop-poc/shop-backoffice/core/tests/mocks"
 	"github.com/hugovallada/shop-poc/shop-backoffice/infra/adapters/in/controller"
 	"github.com/hugovallada/shop-poc/shop-backoffice/infra/adapters/in/controller/routes"
 )
@@ -18,7 +20,9 @@ func init() {
 func main() {
 	slog.Info("Inicializando a aplicação")
 	router := gin.Default()
-	controller := controller.CreateProductController{}
+	persistPort := mocks.PersistProductOutputPortMock{} //TODO: Replace Mock
+	createProductUseCase := core.NewCreateProductUseCase(&persistPort)
+	controller := controller.NewCreateProductController(createProductUseCase)
 	contextGroup := router.Group("/backoffice")
 	productsGroup := contextGroup.Group("/products")
 	routes.InitRoutes(productsGroup, controller)

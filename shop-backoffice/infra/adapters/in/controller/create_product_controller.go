@@ -5,10 +5,19 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
+	"github.com/hugovallada/shop-poc/shop-backoffice/core/ports/in"
 	inputAdapterDto "github.com/hugovallada/shop-poc/shop-backoffice/infra/adapters/in/controller/dto"
 )
 
-type CreateProductController struct{}
+type CreateProductController struct {
+	createProductUseCase in.CreateProductUseCaseInputPort
+}
+
+func NewCreateProductController(createProductUseCase in.CreateProductUseCaseInputPort) CreateProductController {
+	return CreateProductController{
+		createProductUseCase: createProductUseCase,
+	}
+}
 
 func (cp CreateProductController) CreateProduct(c *gin.Context) {
 	var productRequest inputAdapterDto.CreateProductRequest
@@ -22,5 +31,11 @@ func (cp CreateProductController) CreateProduct(c *gin.Context) {
 		return
 	}
 	slog.Info("Cadastrando produto", slog.Any("produto", productRequest))
+	if err = cp.createProductUseCase.Execute(productRequest); err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "can't persist the product"})
+		slog.Error("Can't persist the product", slog.Any("product", productRequest))
+		return
+	}
+
 	c.JSON(201, "Created")
 }

@@ -1,12 +1,12 @@
 package dto
 
 type CreateProductRequest struct {
-	Name           string   `json:"nome"`
-	Department     string   `json:"departamento"`
-	Tags           []string `json:"tags"`
-	Price          uint64   `json:"preco"`
-	Quantity       uint8    `json:"quantidade"`
-	ShouldActivate bool     `json:"ativo"`
+	Name       string   `json:"nome"`
+	Department string   `json:"departamento"`
+	Tags       []string `json:"tags"`
+	Price      uint64   `json:"preco"`
+	Quantity   uint8    `json:"quantidade"`
+	Activate   bool     `json:"ativo"`
 }
 
 func (cp CreateProductRequest) Validate() []string {
@@ -17,4 +17,28 @@ func (cp CreateProductRequest) Validate() []string {
 		errors = append(errors, "Name needs to have more than 2 letters")
 	}
 	return errors
+}
+
+func (c CreateProductRequest) GetName() string {
+	return c.Name
+}
+
+func (c CreateProductRequest) GetDepartment() string {
+	return c.Department
+}
+
+func (c CreateProductRequest) GetTags() []string {
+	return c.Tags
+}
+
+func (c CreateProductRequest) GetPrice() uint64 {
+	return c.Price
+}
+
+func (c CreateProductRequest) GetQuantity() uint8 {
+	return c.Quantity
+}
+
+func (c CreateProductRequest) ShouldActivate() bool {
+	return c.Activate
 }

@@ -6,5 +6,5 @@ import (
 )
 
 func InitRoutes(r *gin.RouterGroup, cp controller.CreateProductController) {
-	r.POST("/products", cp.CreateProduct)
+	r.POST("/", cp.CreateProduct)
 }

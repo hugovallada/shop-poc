@@ -20,7 +20,9 @@ func main() {
 	slog.Info("Inicializando a aplicação")
 	router := gin.Default()
 	controller := controller.CreateProductController{}
-	routes.InitRoutes(&router.RouterGroup, controller)
+	contextGroup := router.Group("/backoffice")
+	productsGroup := contextGroup.Group("/products")
+	routes.InitRoutes(productsGroup, controller)
 	if err := router.Run(":8081"); err != nil {
 		log.Fatal(err)
 	}

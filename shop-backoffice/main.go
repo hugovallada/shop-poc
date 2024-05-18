@@ -23,8 +23,10 @@ func main() {
 
 	contextGroup := router.Group("/backoffice")
 	productsGroup := contextGroup.Group("/products")
+	healthGroup := contextGroup.Group("/health")
 	createProductController := initDependencies()
 	routes.InitRoutes(productsGroup, createProductController)
+	routes.InitActuatorRoutes(healthGroup, initHealthCheckController())
 	if err := router.Run(":8081"); err != nil {
 		log.Fatal(err)
 	}
@@ -36,6 +38,10 @@ func initCreateProductController() controller.CreateProductController {
 	persistPort := mocks.PersistProductOutputPortMock{}                              //TODO: Replace Mock
 	createProductUseCase := core.NewCreateProductUseCase(&persistPort)
 	return controller.NewCreateProductController(createProductUseCase)
+}
+
+func initHealthCheckController() controller.HealthCheckController {
+	return controller.HealthCheckController{}
 }
 
 func initDependencies() controller.CreateProductController {

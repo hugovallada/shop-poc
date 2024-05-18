@@ -9,3 +9,7 @@ Content-Type: application/json
     "quantidade": 10,
     "ativo": true
 }
+
+###
+
+GET http://localhost:8081/backoffice/health/status

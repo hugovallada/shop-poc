@@ -8,3 +8,7 @@ import (
 func InitRoutes(r *gin.RouterGroup, cp controller.CreateProductController) {
 	r.POST("/", cp.CreateProduct)
 }
+
+func InitActuatorRoutes(r *gin.RouterGroup, hc controller.HealthCheckController) {
+	r.GET("/status", hc.HealthStatus)
+}

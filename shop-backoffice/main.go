@@ -20,13 +20,23 @@ func init() {
 func main() {
 	slog.Info("Inicializando a aplicação")
 	router := gin.Default()
-	persistPort := mocks.PersistProductOutputPortMock{} //TODO: Replace Mock
-	createProductUseCase := core.NewCreateProductUseCase(&persistPort)
-	controller := controller.NewCreateProductController(createProductUseCase)
+
 	contextGroup := router.Group("/backoffice")
 	productsGroup := contextGroup.Group("/products")
-	routes.InitRoutes(productsGroup, controller)
+	createProductController := initDependencies()
+	routes.InitRoutes(productsGroup, createProductController)
 	if err := router.Run(":8081"); err != nil {
 		log.Fatal(err)
 	}
+}
+
+func initCreateProductController() controller.CreateProductController {
+	persistPort := mocks.PersistProductOutputPortMock{} //TODO: Replace Mock
+	createProductUseCase := core.NewCreateProductUseCase(&persistPort)
+	return controller.NewCreateProductController(createProductUseCase)
+}
+
+func initDependencies() controller.CreateProductController {
+	createProductController := initCreateProductController()
+	return createProductController
 }

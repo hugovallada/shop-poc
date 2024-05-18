@@ -1,0 +1,11 @@
+POST http://localhost:8081/products
+Content-Type: application/json
+
+{
+    "name": "Notebook Dell LPS",
+    "department": "Informatica",
+    "tags": ["Informatica","Notebook","Acessorios","Home-Office"],
+    "price": 300000,
+    "quantity": 10,
+    "shouldActivate": true
+}

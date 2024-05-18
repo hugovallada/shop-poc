@@ -31,7 +31,9 @@ func main() {
 }
 
 func initCreateProductController() controller.CreateProductController {
-	persistPort := mocks.PersistProductOutputPortMock{} //TODO: Replace Mock
+	/*productRepository := data.NewProductRepository(*config.ConfigDynamoDB())
+	persistAdapter := out.NewPersistProductDynamoOutputAdapter(productRepository) */ //TODO: Usar esse bloco para substituir o mock
+	persistPort := mocks.PersistProductOutputPortMock{}                              //TODO: Replace Mock
 	createProductUseCase := core.NewCreateProductUseCase(&persistPort)
 	return controller.NewCreateProductController(createProductUseCase)
 }

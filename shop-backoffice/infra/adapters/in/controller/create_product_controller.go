@@ -1,8 +1,8 @@
 package controller
 
 import (
-	"fmt"
 	"log/slog"
+	"net/http"
 
 	"github.com/gin-gonic/gin"
 	inputAdapterDto "github.com/hugovallada/shop-poc/shop-backoffice/infra/adapters/in/controller/dto"
@@ -14,10 +14,13 @@ func (cp CreateProductController) CreateProduct(c *gin.Context) {
 	var productRequest inputAdapterDto.CreateProductRequest
 	err := c.BindJSON(&productRequest)
 	if err != nil {
-		c.JSON(500, "Erro interno ao fazer a conversão de variaveis")
+		c.JSON(http.StatusInternalServerError, gin.H{"message": "error while deserializing"})
 		return
 	}
-	fmt.Println(productRequest)
+	if errors := productRequest.Validate(); len(errors) > 0 {
+		c.JSON(http.StatusBadRequest, gin.H{"errors": errors})
+		return
+	}
 	slog.Info("Cadastrando produto", slog.Any("produto", productRequest))
 	c.JSON(201, "Created")
 }

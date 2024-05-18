@@ -1,7 +1,7 @@
 package controller
 
 import (
-	"fmt"
+	"log/slog"
 
 	"github.com/gin-gonic/gin"
 )
@@ -11,6 +11,6 @@ type CreateProductController struct{}
 func (cp CreateProductController) CreateProduct(c *gin.Context) {
 	var mapa map[string]any
 	c.BindJSON(&mapa)
-	fmt.Println(mapa)
+	slog.Info("Cadastrando produto", slog.Any("produto", mapa))
 	c.JSON(201, "Created")
 }

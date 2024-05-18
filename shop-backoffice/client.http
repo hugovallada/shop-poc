@@ -2,10 +2,10 @@ POST http://localhost:8081/backoffice/products
 Content-Type: application/json
 
 {
-    "name": "Notebook Dell LPS",
-    "department": "Informatica",
+    "nome": "Notebook Dell LPS",
+    "departmento": "Informatica",
     "tags": ["Informatica","Notebook","Acessorios","Home-Office"],
-    "price": 300000,
-    "quantity": 10,
-    "shouldActivate": true
+    "preco": 300000,
+    "quantidade": 10,
+    "ativo": true
 }

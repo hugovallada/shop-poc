@@ -10,6 +10,7 @@ import (
 	outputPort "github.com/hugovallada/shop-poc/shop-backoffice/core/ports/out"
 	"github.com/hugovallada/shop-poc/shop-backoffice/core/tests/mocks"
 	"github.com/hugovallada/shop-poc/shop-backoffice/infra/adapters/in/controller"
+	"github.com/hugovallada/shop-poc/shop-backoffice/infra/adapters/in/controller/middlewares"
 	"github.com/hugovallada/shop-poc/shop-backoffice/infra/adapters/in/controller/routes"
 	"github.com/hugovallada/shop-poc/shop-backoffice/infra/adapters/out"
 	"github.com/hugovallada/shop-poc/shop-backoffice/infra/config"
@@ -26,6 +27,7 @@ func init() {
 func main() {
 	slog.Info("Inicializando a aplicação")
 	router := gin.Default()
+	router.Use(middlewares.CallDuration)
 
 	contextGroup := router.Group("/backoffice")
 	productsGroup := contextGroup.Group("/products")

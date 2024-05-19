@@ -44,7 +44,7 @@ func initCreateProductController() controller.CreateProductController {
 	env := os.Getenv("ENVIRONMENT")
 	slog.Info("Initializing dependencies for environment " + env)
 	var persistPort outputPort.PersistProductOutputPort
-	productRepository := data.NewProductRepository(*config.ConfigDynamoDB())
+	productRepository := data.NewProductRepository(*config.BuildDynamoDBConfig(env))
 	persistAdapter := out.NewPersistProductDynamoOutputAdapter(productRepository)
 	persistMock := mocks.PersistProductOutputPortMock{}
 	if env != "local" {

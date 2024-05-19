@@ -10,8 +10,20 @@ func ConfigDynamoDB() *dynamodb.DynamoDB {
 	return dynamodb.New(prepareSess())
 }
 
+func ConfigDynamoDBLocal() *dynamodb.DynamoDB {
+	return dynamodb.New(prepareLocalSess())
+}
+
+func prepareLocalSess() *session.Session {
+	return session.Must(session.NewSession(&aws.Config{
+		Region:   aws.String("sa-east-1"),
+		Endpoint: aws.String("http://localhost:8000"),
+	}))
+}
+
 func prepareSess() *session.Session {
 	return session.Must(session.NewSession(&aws.Config{
-		Region: aws.String("sa-east-1"),
+		Region:   aws.String("sa-east-1"),
+		Endpoint: aws.String("http://localhost:8000"),
 	}))
 }

@@ -10,7 +10,7 @@ import (
 )
 
 const (
-	TABLE_NAME = "tbx_000"
+	TABLE_NAME = "Products"
 )
 
 type ProductRepository struct {
@@ -33,5 +33,8 @@ func (pr ProductRepository) SaveProduct(productModel model.ProductModel) error {
 		TableName: aws.String(TABLE_NAME),
 		Item:      dynamoItem,
 	})
+	if err != nil {
+		slog.Error("Error while creating product", slog.Any("error", err))
+	}
 	return err
 }

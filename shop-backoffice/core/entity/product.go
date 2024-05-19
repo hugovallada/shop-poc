@@ -28,7 +28,7 @@ func (p *Product) UpdateProduct() {
 }
 
 func (p *Product) UpdateTotalPrice() {
-	p.TotalPrice = vo.NewMoney(p.TotalPrice.Value * uint64(p.Quantity))
+	p.TotalPrice = vo.NewMoney(p.Price.Value * uint64(p.Quantity))
 }
 
 func (p *Product) DisableProductOffering() {

@@ -2,11 +2,11 @@ POST http://localhost:8081/backoffice/products
 Content-Type: application/json
 
 {
-    "nome": "Dell",
-    "departmento": "Informatica",
+    "nome": "ACER 23",
+    "departamento": "Informatica",
     "tags": ["Informatica","Notebook","Acessorios","Home-Office"],
-    "preco": 300000,
-    "quantidade": 10,
+    "preco": 1200000,
+    "quantidade": 3,
     "ativo": true
 }
 

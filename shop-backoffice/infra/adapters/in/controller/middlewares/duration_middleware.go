@@ -10,9 +10,7 @@ import (
 
 func CallDuration(c *gin.Context) {
 	startTime := time.Now()
-
 	c.Next()
-
-	endTime := time.Since(startTime)
-	slog.Info(fmt.Sprintf("Call executed in %s", endTime))
+	elapsedTime := time.Since(startTime)
+	slog.Info(fmt.Sprintf("Call executed in %s", elapsedTime))
 }

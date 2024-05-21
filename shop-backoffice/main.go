@@ -9,7 +9,6 @@ import (
 	"github.com/hugovallada/shop-poc/shop-backoffice/core"
 	outputPort "github.com/hugovallada/shop-poc/shop-backoffice/core/ports/out"
 	"github.com/hugovallada/shop-poc/shop-backoffice/core/tests/mocks"
-	"github.com/hugovallada/shop-poc/shop-backoffice/core/utils/shared"
 	"github.com/hugovallada/shop-poc/shop-backoffice/infra/adapters/in/controller"
 	"github.com/hugovallada/shop-poc/shop-backoffice/infra/adapters/in/controller/middlewares"
 	"github.com/hugovallada/shop-poc/shop-backoffice/infra/adapters/in/controller/routes"
@@ -20,13 +19,7 @@ import (
 )
 
 func init() {
-	handler := slog.NewJSONHandler(os.Stdout, &slog.HandlerOptions{
-		AddSource: true,
-	})
-	keys := []any{shared.CORRELATION_ID, shared.TRACE_ID}
-	ctxHandler := config.NewCorrelationMultiKey(keys, handler)
-	logger := slog.New(ctxHandler)
-	slog.SetDefault(logger)
+	config.SetDefaultSlogHandler()
 	_ = godotenv.Load()
 }
 

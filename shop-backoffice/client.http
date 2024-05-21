@@ -1,5 +1,7 @@
 POST http://localhost:8081/backoffice/products
 Content-Type: application/json
+correlationId: "30eb2105-f4cc-49e0-95e8-04da1eca3737"
+traceId: "30eb2105"
 
 {
     "nome": "ACER 23",

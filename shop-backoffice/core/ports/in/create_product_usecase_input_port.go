@@ -1,7 +1,11 @@
 package in
 
-import "github.com/hugovallada/shop-poc/shop-backoffice/core/ports/in/dto"
+import (
+	"context"
+
+	"github.com/hugovallada/shop-poc/shop-backoffice/core/ports/in/dto"
+)
 
 type CreateProductUseCaseInputPort interface {
-	Execute(dto.CreateProductParameter) error
+	Execute(context.Context, dto.CreateProductParameter) error
 }

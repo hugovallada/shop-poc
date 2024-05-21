@@ -1,6 +1,7 @@
 package mocks
 
 import (
+	"context"
 	"errors"
 	"strings"
 
@@ -9,7 +10,7 @@ import (
 
 type PersistProductOutputPortMock struct{}
 
-func (p *PersistProductOutputPortMock) Execute(p0 dto.PersistProductParameter) error {
+func (p *PersistProductOutputPortMock) Execute(ctx context.Context, p0 dto.PersistProductParameter) error {
 	if strings.HasPrefix(p0.GetName(), "FAILURE") {
 		return errors.New("invalid product")
 	}

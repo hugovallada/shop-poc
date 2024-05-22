@@ -8,8 +8,8 @@ import (
 	"strings"
 
 	"github.com/gin-gonic/gin"
+	"github.com/hugovallada/correlationcontexthandler"
 	"github.com/hugovallada/shop-poc/shop-backoffice/core/ports/in"
-	"github.com/hugovallada/shop-poc/shop-backoffice/core/utils/shared"
 	inputAdapterDto "github.com/hugovallada/shop-poc/shop-backoffice/infra/adapters/in/controller/dto"
 )
 
@@ -57,8 +57,8 @@ func contextWithHeadersValues(parentContext context.Context, c *gin.Context) (co
 		return nil, errors.New("correlation id can't be null")
 	}
 	traceId := getHeaderValue("traceId", c)
-	ctx := context.WithValue(parentContext, shared.CORRELATION_ID, correlationId)
-	ctx = context.WithValue(ctx, shared.TRACE_ID, traceId)
+	ctx := context.WithValue(parentContext, correlationcontexthandler.CORRELATION_ID, correlationId)
+	ctx = context.WithValue(ctx, correlationcontexthandler.TRACE_ID, traceId)
 	return ctx, nil
 }
 

@@ -10,10 +10,10 @@ import (
 )
 
 type PersistProductOutputAdapter struct {
-	productRepository data.ProductRepository
+	productRepository data.ProductRepositoryInterface
 }
 
-func NewPersistProductDynamoOutputAdapter(productRepository data.ProductRepository) PersistProductOutputAdapter {
+func NewPersistProductDynamoOutputAdapter(productRepository data.ProductRepositoryInterface) PersistProductOutputAdapter {
 	return PersistProductOutputAdapter{
 		productRepository: productRepository,
 	}

@@ -57,8 +57,10 @@ func contextWithHeadersValues(parentContext context.Context, c *gin.Context) (co
 		return nil, errors.New("correlation id can't be null")
 	}
 	traceId := getHeaderValue("traceId", c)
+	flowId := getHeaderValue("flowId", c)
 	ctx := context.WithValue(parentContext, correlationcontexthandler.CORRELATION_ID, correlationId)
 	ctx = context.WithValue(ctx, correlationcontexthandler.TRACE_ID, traceId)
+	ctx = context.WithValue(ctx, correlationcontexthandler.FLOW_ID, flowId)
 	return ctx, nil
 }
 

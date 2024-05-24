@@ -8,4 +8,6 @@ import (
 
 type ProductRepositoryInterface interface {
 	SaveProduct(context.Context, model.ProductModel) error
+	
+	GetProductsByName(context.Context, string) ([]model.ProductModel, error)
 }

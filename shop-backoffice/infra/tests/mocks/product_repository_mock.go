@@ -40,6 +40,21 @@ func (m *MockProductRepositoryInterface) EXPECT() *MockProductRepositoryInterfac
 	return m.recorder
 }
 
+// GetProductsByName mocks base method.
+func (m *MockProductRepositoryInterface) GetProductsByName(arg0 context.Context, arg1 string) ([]model.ProductModel, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "GetProductsByName", arg0, arg1)
+	ret0, _ := ret[0].([]model.ProductModel)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// GetProductsByName indicates an expected call of GetProductsByName.
+func (mr *MockProductRepositoryInterfaceMockRecorder) GetProductsByName(arg0, arg1 any) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetProductsByName", reflect.TypeOf((*MockProductRepositoryInterface)(nil).GetProductsByName), arg0, arg1)
+}
+
 // SaveProduct mocks base method.
 func (m *MockProductRepositoryInterface) SaveProduct(arg0 context.Context, arg1 model.ProductModel) error {
 	m.ctrl.T.Helper()

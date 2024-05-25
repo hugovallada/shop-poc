@@ -46,13 +46,14 @@ func initCreateProductController() controller.CreateProductController {
 	var persistPort outputPort.PersistProductOutputPort
 	productRepository := data.NewProductRepository(*db.BuildDynamoDBConfig(env))
 	persistAdapter := out.NewPersistProductDynamoOutputAdapter(productRepository)
+	getProductAdapter := out.NewGetProductByNameOutputAdapter(productRepository)
 	persistMock := mocks.PersistProductOutputPortMock{}
 	if env != "local" {
 		persistPort = &persistAdapter
 	} else {
 		persistPort = &persistMock
 	}
-	createProductUseCase := core.NewCreateProductUseCase(persistPort)
+	createProductUseCase := core.NewCreateProductUseCase(persistPort, getProductAdapter)
 	return controller.NewCreateProductController(createProductUseCase)
 }
 

@@ -6,6 +6,7 @@ import (
 )
 
 type ProductBuilder struct {
+	ID         string
 	Name       string
 	Department string
 	Tags       []string
@@ -17,6 +18,11 @@ type ProductBuilder struct {
 
 func NewProductBuilder() *ProductBuilder {
 	return &ProductBuilder{}
+}
+
+func (pb *ProductBuilder) SetID(id string) *ProductBuilder {
+	pb.ID = id
+	return pb
 }
 
 func (pb *ProductBuilder) SetName(name string) *ProductBuilder {
@@ -56,7 +62,7 @@ func (pb *ProductBuilder) SetUpdatedAt(updatedAt uint64) *ProductBuilder {
 
 func (pb *ProductBuilder) Build() entity.Product {
 	return entity.Product{
-		ID:         vo.NewID(),
+		ID:         vo.ParseIdOrNew(pb.ID),
 		Name:       vo.NewName(pb.Name),
 		Department: vo.NewDepartment(pb.Department),
 		Tags:       vo.NewTags(pb.Tags),

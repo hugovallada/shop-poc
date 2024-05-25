@@ -17,6 +17,20 @@ type Product struct {
 	UpdatedAt  vo.Timestamp
 }
 
+func (p *Product) UpdateProductWithNewData(newProductData Product) {
+	p.ID = newProductData.ID
+	p.Department = newProductData.Department
+	p.Tags = newProductData.Tags
+	p.Price = newProductData.Price
+	p.Quantity = newProductData.Quantity
+	p.Active = newProductData.Active
+}
+
+func (p *Product) UpdateProductWithExistingData(oldProduct Product) {
+	p.ID = oldProduct.ID
+	p.CreatedAt = oldProduct.CreatedAt
+}
+
 func (p *Product) UpdateProduct() {
 	p.UpdatedAt = vo.NewTimestamp()
 	if p.Quantity == 0 {

@@ -8,8 +8,13 @@ import (
 )
 
 func SetDefaultSlogHandler() {
+	env := os.Getenv("ENVIRONMENT")
+	var addSource bool = true
+	if env == "local" {
+		addSource = false
+	}
 	handler := slog.NewJSONHandler(os.Stdout, &slog.HandlerOptions{
-		AddSource: true,
+		AddSource: addSource,
 	})
 	keys := []any{correlationcontexthandler.CORRELATION_ID, correlationcontexthandler.TRACE_ID, correlationcontexthandler.FLOW_ID}
 	ctxHandler := correlationcontexthandler.NewMultiKeyContextHandler(keys, handler)

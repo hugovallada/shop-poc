@@ -5,11 +5,11 @@ traceId: "30eb2105"
 flowId: "99882992"
 
 {
-    "nome": "ACER 23",
+    "nome": "ACER 241",
     "departamento": "Informatica",
     "tags": ["Informatica","Notebook","Acessorios","Home-Office"],
-    "preco": 1200000,
-    "quantidade": 3,
+    "preco": 1500000,
+    "quantidade": 5,
     "ativo": true
 }
 

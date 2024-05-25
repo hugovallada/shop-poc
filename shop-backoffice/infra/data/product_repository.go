@@ -56,6 +56,7 @@ func (pr ProductRepository) GetProductsByName(ctx context.Context, name string) 
 				},
 			},
 		},
+		//Limit: aws.Int64(2),
 	}
 	queryResult, err := pr.dynamo.Query(queryInput)
 	if err != nil {

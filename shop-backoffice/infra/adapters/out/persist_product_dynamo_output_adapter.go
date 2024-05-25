@@ -23,6 +23,6 @@ func (p *PersistProductOutputAdapter) Execute(ctx context.Context, persistProduc
 	productModel := model.NewProductModel(persistProductParameter)
 	slog.InfoContext(ctx,
 		"new ProductModel created from PersistProductParamter",
-		slog.Any("persistProductParamter", persistProductParameter), slog.Any("productModel", productModel))
+		slog.Any("persistProductParamter", persistProductParameter), slog.Any("productModel", productModel.ID))
 	return p.productRepository.SaveProduct(ctx, productModel)
 }

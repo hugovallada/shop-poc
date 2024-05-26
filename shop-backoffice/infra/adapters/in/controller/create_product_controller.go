@@ -74,6 +74,8 @@ func getErrorHttpStatus(err error) int {
 	switch err.(type) {
 	case customerror.InternalError:
 		return http.StatusInternalServerError
+	case customerror.UnprocessableEntityError:
+		return http.StatusUnprocessableEntity
 	default:
 		return http.StatusBadGateway
 	}

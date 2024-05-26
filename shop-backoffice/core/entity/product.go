@@ -1,6 +1,8 @@
 package entity
 
 import (
+	"slices"
+
 	"github.com/hugovallada/shop-poc/shop-backoffice/core/vo"
 )
 
@@ -26,9 +28,21 @@ func (p *Product) UpdateProductWithNewData(newProductData Product) {
 	p.Active = newProductData.Active
 }
 
-func (p *Product) UpdateProductWithExistingData(oldProduct Product) {
+func (p *Product) UpdateProductWithExistingData(oldProduct Product) bool {
+	if p.Quantity == oldProduct.Quantity && p.Price == oldProduct.Price && p.Active == oldProduct.Active && p.Department == oldProduct.Department && len(p.Tags.Value) == len(oldProduct.Tags.Value) {
+		var sameTags = true
+		for _, tag := range p.Tags.Value {
+			if !slices.Contains(oldProduct.Tags.Value, tag) {
+				sameTags = false
+			}
+		}
+		if sameTags {
+			return false
+		}
+	}
 	p.ID = oldProduct.ID
 	p.CreatedAt = oldProduct.CreatedAt
+	return true
 }
 
 func (p *Product) UpdateProduct() {

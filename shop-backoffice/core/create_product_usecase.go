@@ -41,7 +41,10 @@ func (cp CreateProductUseCase) Execute(ctx context.Context, createProductParamet
 	}
 	if len(products) == 1 {
 		productEntity := factorys.ProductFactoryFromGetProuctByNameResponse(products[0])
-		product.UpdateProductWithExistingData(productEntity)
+		if updated := product.UpdateProductWithExistingData(productEntity); !updated {
+			slog.ErrorContext(ctx, "Failed to update product")
+			return customerror.NewUnprocessableEntityError("there is no new info to update")
+		}
 		slog.InfoContext(ctx, "product updated with new data", slog.Any("oldProduct", productEntity), slog.Any("newProduct", product))
 	}
 	product.UpdateProduct()

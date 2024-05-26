@@ -7,7 +7,7 @@ services:
     command: "-jar DynamoDBLocal.jar -sharedDb"
     volumes:
       - dynamodb_data:/dynamodblocal
-  shop-poc:
+  shop-backoffice:
     build:
       context: .
       dockerfile: Dockerfile

@@ -16,12 +16,18 @@ import (
 	"github.com/hugovallada/shop-poc/shop-backoffice/infra/config/db"
 	"github.com/hugovallada/shop-poc/shop-backoffice/infra/config/logs"
 	"github.com/hugovallada/shop-poc/shop-backoffice/infra/data"
-	"github.com/joho/godotenv"
+)
+
+var (
+	env string
 )
 
 func init() {
 	logs.SetDefaultSlogHandler()
-	_ = godotenv.Load()
+	env = os.Getenv("ENVIRONMENT")
+	if env == "" {
+		env = "local"
+	}
 }
 
 func main() {
@@ -41,7 +47,6 @@ func main() {
 }
 
 func initCreateProductController() controller.CreateProductController {
-	env := os.Getenv("ENVIRONMENT")
 	slog.Info("Initializing dependencies for environment " + env)
 	var persistPort outputPort.PersistProductOutputPort
 	productRepository := data.NewProductRepository(*db.BuildDynamoDBConfig(env))

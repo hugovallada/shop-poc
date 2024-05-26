@@ -43,9 +43,9 @@ AWS DynamoDB
 Arquitetura Hexagonal/Limpa
 
 ## Dependências diretas da Aplicação:
-[GIN](https://github.com/aws/aws-sdk-go)
+[GIN](https://github.com/gin-gonic/gin)
 
-[AWS](https://github.com/gin-gonic/gin)
+[AWS](https://github.com/aws/aws-sdk-go)
 
 [GOOGLE UUID](https://github.com/google/uuid)
 

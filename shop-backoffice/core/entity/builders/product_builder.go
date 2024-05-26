@@ -6,17 +6,24 @@ import (
 )
 
 type ProductBuilder struct {
+	ID         string
 	Name       string
 	Department string
 	Tags       []string
 	Price      uint64
 	Quantity   uint8
 	Active     bool
+	CreatedAt  uint64
 	UpdatedAt  uint64
 }
 
 func NewProductBuilder() *ProductBuilder {
 	return &ProductBuilder{}
+}
+
+func (pb *ProductBuilder) SetID(id string) *ProductBuilder {
+	pb.ID = id
+	return pb
 }
 
 func (pb *ProductBuilder) SetName(name string) *ProductBuilder {
@@ -49,6 +56,11 @@ func (pb *ProductBuilder) SetActive(active bool) *ProductBuilder {
 	return pb
 }
 
+func (pb *ProductBuilder) SetCreatedAt(createdAt uint64) *ProductBuilder {
+	pb.CreatedAt = createdAt
+	return pb
+}
+
 func (pb *ProductBuilder) SetUpdatedAt(updatedAt uint64) *ProductBuilder {
 	pb.UpdatedAt = updatedAt
 	return pb
@@ -56,7 +68,7 @@ func (pb *ProductBuilder) SetUpdatedAt(updatedAt uint64) *ProductBuilder {
 
 func (pb *ProductBuilder) Build() entity.Product {
 	return entity.Product{
-		ID:         vo.NewID(),
+		ID:         vo.ParseIdOrNew(pb.ID),
 		Name:       vo.NewName(pb.Name),
 		Department: vo.NewDepartment(pb.Department),
 		Tags:       vo.NewTags(pb.Tags),
@@ -64,7 +76,7 @@ func (pb *ProductBuilder) Build() entity.Product {
 		Quantity:   pb.Quantity,
 		TotalPrice: vo.NewMoney(pb.Price * uint64(pb.Quantity)),
 		Active:     pb.Active,
-		CreatedAt:  vo.NewTimestamp(),
-		UpdatedAt:  vo.NewTimestamp(),
+		CreatedAt:  vo.NewTimestampOf(pb.CreatedAt),
+		UpdatedAt:  vo.NewTimestampOf(pb.UpdatedAt),
 	}
 }

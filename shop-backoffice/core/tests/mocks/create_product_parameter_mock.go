@@ -1,14 +1,11 @@
 package mocks
 
 type CreateProductParameterMock struct {
-	IsError bool
+	ProductName string
 }
 
 func (c *CreateProductParameterMock) GetName() string {
-	if c.IsError {
-		return "FAILURE_PRODUCT"
-	}
-	return "Product"
+	return c.ProductName
 }
 
 func (c *CreateProductParameterMock) GetDepartment() string {

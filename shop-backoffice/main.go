@@ -13,13 +13,14 @@ import (
 	"github.com/hugovallada/shop-poc/shop-backoffice/infra/adapters/in/controller/middlewares"
 	"github.com/hugovallada/shop-poc/shop-backoffice/infra/adapters/in/controller/routes"
 	"github.com/hugovallada/shop-poc/shop-backoffice/infra/adapters/out"
-	"github.com/hugovallada/shop-poc/shop-backoffice/infra/config"
+	"github.com/hugovallada/shop-poc/shop-backoffice/infra/config/db"
+	"github.com/hugovallada/shop-poc/shop-backoffice/infra/config/logs"
 	"github.com/hugovallada/shop-poc/shop-backoffice/infra/data"
 	"github.com/joho/godotenv"
 )
 
 func init() {
-	config.SetDefaultSlogHandler()
+	logs.SetDefaultSlogHandler()
 	_ = godotenv.Load()
 }
 
@@ -43,15 +44,16 @@ func initCreateProductController() controller.CreateProductController {
 	env := os.Getenv("ENVIRONMENT")
 	slog.Info("Initializing dependencies for environment " + env)
 	var persistPort outputPort.PersistProductOutputPort
-	productRepository := data.NewProductRepository(*config.BuildDynamoDBConfig(env))
+	productRepository := data.NewProductRepository(*db.BuildDynamoDBConfig(env))
 	persistAdapter := out.NewPersistProductDynamoOutputAdapter(productRepository)
+	getProductAdapter := out.NewGetProductByNameOutputAdapter(productRepository)
 	persistMock := mocks.PersistProductOutputPortMock{}
 	if env != "local" {
 		persistPort = &persistAdapter
 	} else {
 		persistPort = &persistMock
 	}
-	createProductUseCase := core.NewCreateProductUseCase(persistPort)
+	createProductUseCase := core.NewCreateProductUseCase(persistPort, getProductAdapter)
 	return controller.NewCreateProductController(createProductUseCase)
 }
 

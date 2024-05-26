@@ -8,8 +8,9 @@ import (
 	"strings"
 
 	"github.com/gin-gonic/gin"
+	"github.com/hugovallada/correlationcontexthandler"
+	"github.com/hugovallada/shop-poc/shop-backoffice/core/customerror"
 	"github.com/hugovallada/shop-poc/shop-backoffice/core/ports/in"
-	"github.com/hugovallada/shop-poc/shop-backoffice/core/utils/shared"
 	inputAdapterDto "github.com/hugovallada/shop-poc/shop-backoffice/infra/adapters/in/controller/dto"
 )
 
@@ -34,7 +35,7 @@ func (cp CreateProductController) CreateProduct(c *gin.Context) {
 	err = c.BindJSON(&productRequest)
 	if err != nil {
 		slog.ErrorContext(ctx, "error while deserializing")
-		c.JSON(http.StatusInternalServerError, gin.H{"message": "error while deserializing"})
+		c.JSON(http.StatusBadRequest, gin.H{"message": "error while deserializing"})
 		return
 	}
 	if errors := productRequest.Validate(); len(errors) > 0 {
@@ -44,7 +45,8 @@ func (cp CreateProductController) CreateProduct(c *gin.Context) {
 	}
 	slog.InfoContext(ctx, "Cadastrando produto", slog.Any("produto", productRequest))
 	if err = cp.createProductUseCase.Execute(ctx, productRequest); err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "can't persist the product"})
+		httpStatus := getErrorHttpStatus(err)
+		c.JSON(httpStatus, gin.H{"error": err.Error()})
 		slog.ErrorContext(ctx, "Can't persist the product", slog.Any("product", productRequest))
 		return
 	}
@@ -57,11 +59,24 @@ func contextWithHeadersValues(parentContext context.Context, c *gin.Context) (co
 		return nil, errors.New("correlation id can't be null")
 	}
 	traceId := getHeaderValue("traceId", c)
-	ctx := context.WithValue(parentContext, shared.CORRELATION_ID, correlationId)
-	ctx = context.WithValue(ctx, shared.TRACE_ID, traceId)
+	flowId := getHeaderValue("flowId", c)
+	ctx := context.WithValue(parentContext, correlationcontexthandler.CORRELATION_ID, correlationId)
+	ctx = context.WithValue(ctx, correlationcontexthandler.TRACE_ID, traceId)
+	ctx = context.WithValue(ctx, correlationcontexthandler.FLOW_ID, flowId)
 	return ctx, nil
 }
 
 func getHeaderValue(key string, c *gin.Context) string {
 	return strings.Trim(strings.Trim(c.GetHeader(key), "\""), "")
+}
+
+func getErrorHttpStatus(err error) int {
+	switch err.(type) {
+	case customerror.InternalError:
+		return http.StatusInternalServerError
+	case customerror.UnprocessableEntityError:
+		return http.StatusUnprocessableEntity
+	default:
+		return http.StatusBadGateway
+	}
 }

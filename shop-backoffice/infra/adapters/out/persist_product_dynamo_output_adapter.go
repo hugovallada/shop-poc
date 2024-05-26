@@ -10,10 +10,10 @@ import (
 )
 
 type PersistProductOutputAdapter struct {
-	productRepository data.ProductRepository
+	productRepository data.ProductRepositoryInterface
 }
 
-func NewPersistProductDynamoOutputAdapter(productRepository data.ProductRepository) PersistProductOutputAdapter {
+func NewPersistProductDynamoOutputAdapter(productRepository data.ProductRepositoryInterface) PersistProductOutputAdapter {
 	return PersistProductOutputAdapter{
 		productRepository: productRepository,
 	}
@@ -23,6 +23,6 @@ func (p *PersistProductOutputAdapter) Execute(ctx context.Context, persistProduc
 	productModel := model.NewProductModel(persistProductParameter)
 	slog.InfoContext(ctx,
 		"new ProductModel created from PersistProductParamter",
-		slog.Any("persistProductParamter", persistProductParameter), slog.Any("productModel", productModel))
+		slog.Any("persistProductParamter", persistProductParameter), slog.Any("productModel", productModel.ID))
 	return p.productRepository.SaveProduct(ctx, productModel)
 }

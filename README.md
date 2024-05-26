@@ -4,5 +4,8 @@
 ## Aplicações que fazem parte da POC:  Backoffice
 
 ### Como rodar a aplicação:
-    Rodar o comando docker compose up -d na raiz do projeto
+Na raiz do projeto rodar o comando:
+
+    docker compose up -d
+
 

@@ -43,14 +43,14 @@ AWS DynamoDB
 Arquitetura Hexagonal/Limpa
 
 ## Dependências diretas da Aplicação:
-GIN (github.com/aws/aws-sdk-go)
+[GIN](github.com/aws/aws-sdk-go)
 
-AWS (github.com/gin-gonic/gin)
+[AWS](github.com/gin-gonic/gin)
 
-GOOGLE UUID (github.com/google/uuid)
+[GOOGLE UUID](github.com/google/uuid)
 
-TESTIFY (github.com/stretchr/testify)
+[TESTIFY](github.com/stretchr/testify)
 
-MOCKGEN (go.uber.org/mock)
+[MOCKGEN](go.uber.org/mock)
 
-CONTEXTCORRELATIONHANDLER (github.com/hugovallada/correlationcontexthandler)
+[CONTEXTCORRELATIONHANDLER](github.com/hugovallada/correlationcontexthandler)

@@ -2,7 +2,6 @@ package core
 
 import (
 	"context"
-	"fmt"
 	"log/slog"
 
 	"github.com/hugovallada/shop-poc/shop-backoffice/core/customerror"
@@ -42,9 +41,7 @@ func (cp CreateProductUseCase) Execute(ctx context.Context, createProductParamet
 	}
 	if len(products) == 1 {
 		productEntity := factorys.ProductFactoryFromGetProuctByNameResponse(products[0])
-		fmt.Println("Pré id ", product.ID.Value)
 		product.UpdateProductWithExistingData(productEntity)
-		fmt.Println("POST ID ", product.ID.Value)
 		slog.InfoContext(ctx, "product updated with new data", slog.Any("oldProduct", productEntity), slog.Any("newProduct", product))
 	}
 	product.UpdateProduct()

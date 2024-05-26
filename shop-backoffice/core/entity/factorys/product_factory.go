@@ -29,5 +29,7 @@ func ProductFactoryFromGetProuctByNameResponse(getProductByNameResponse outputDt
 		SetPrice(getProductByNameResponse.GetPrice()).
 		SetQuantity(getProductByNameResponse.GetQuantity()).
 		SetActive(getProductByNameResponse.IsActive()).
+		SetUpdatedAt(getProductByNameResponse.GetUpdatedAt()).
+		SetCreatedAt(getProductByNameResponse.GetCreatedAt()).
 		Build()
 }

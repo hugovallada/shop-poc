@@ -2,10 +2,10 @@ package dto
 
 type CreateProductRequest struct {
 	Name       string   `json:"nome" binding:"required,min=4,max=20"`
-	Department string   `json:"departamento"`
-	Tags       []string `json:"tags"`
-	Price      uint64   `json:"preco"`
-	Quantity   uint8    `json:"quantidade"`
+	Department string   `json:"departamento" binding:"required,min=5,max=30"`
+	Tags       []string `json:"tags" binding:"required"`
+	Price      uint64   `json:"preco" binding:"required,gt=0"`
+	Quantity   uint8    `json:"quantidade" binding:"required,lte=100"`
 	Activate   bool     `json:"ativo"`
 }
 

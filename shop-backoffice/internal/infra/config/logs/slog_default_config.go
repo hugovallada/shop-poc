@@ -5,14 +5,11 @@ import (
 	"os"
 
 	"github.com/hugovallada/correlationcontexthandler"
+	"github.com/spf13/viper"
 )
 
 func SetDefaultSlogHandler() {
-	env := os.Getenv("ENVIRONMENT")
-	var addSource bool = true
-	if env == "local" {
-		addSource = false
-	}
+	addSource := viper.GetBool("log.add_source")
 	handler := slog.NewJSONHandler(os.Stdout, &slog.HandlerOptions{
 		AddSource: addSource,
 	})

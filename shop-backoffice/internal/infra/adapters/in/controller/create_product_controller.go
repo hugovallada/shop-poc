@@ -13,6 +13,7 @@ import (
 	"github.com/hugovallada/shop-poc/shop-backoffice/internal/core/customerror"
 	"github.com/hugovallada/shop-poc/shop-backoffice/internal/core/ports/in"
 	"github.com/hugovallada/shop-poc/shop-backoffice/internal/infra/adapters/in/controller/dto"
+	"github.com/hugovallada/shop-poc/shop-backoffice/internal/infra/utils"
 )
 
 type CreateProductController struct {
@@ -36,12 +37,8 @@ func (cp CreateProductController) CreateProduct(c *gin.Context) {
 	err = c.BindJSON(&productRequest)
 	if err != nil {
 		slog.ErrorContext(ctx, "error while deserializing", slog.Any("error", err.Error()))
-		c.JSON(http.StatusBadRequest, gin.H{"message": "error while deserializing"})
-		return
-	}
-	if errors := productRequest.Validate(); len(errors) > 0 {
-		slog.ErrorContext(ctx, "validation error", slog.Any("errors", errors))
-		c.JSON(http.StatusBadRequest, gin.H{"errors": errors})
+		validationErrors := utils.ValidateErrors(err, dto.CreateProductRequest{})
+		c.JSON(http.StatusBadRequest, gin.H{"errors": validationErrors})
 		return
 	}
 	slog.InfoContext(ctx, "Cadastrando produto", slog.Any("produto", productRequest))

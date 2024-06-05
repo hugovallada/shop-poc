@@ -7,8 +7,6 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/hugovallada/shop-poc/shop-backoffice/internal/core"
-	outputPort "github.com/hugovallada/shop-poc/shop-backoffice/internal/core/ports/out"
-	"github.com/hugovallada/shop-poc/shop-backoffice/internal/core/tests/mocks"
 	"github.com/hugovallada/shop-poc/shop-backoffice/internal/infra/adapters/in/controller"
 	"github.com/hugovallada/shop-poc/shop-backoffice/internal/infra/adapters/in/controller/middlewares"
 	"github.com/hugovallada/shop-poc/shop-backoffice/internal/infra/adapters/in/controller/routes"
@@ -16,6 +14,7 @@ import (
 	"github.com/hugovallada/shop-poc/shop-backoffice/internal/infra/config/db"
 	"github.com/hugovallada/shop-poc/shop-backoffice/internal/infra/config/logs"
 	"github.com/hugovallada/shop-poc/shop-backoffice/internal/infra/data"
+	"github.com/spf13/viper"
 )
 
 var (
@@ -23,10 +22,25 @@ var (
 )
 
 func init() {
+	initViperConfig()
 	logs.SetDefaultSlogHandler()
 	env = os.Getenv("ENVIRONMENT")
 	if env == "" {
-		env = "local"
+		err := os.Setenv("ENVIRONMENT", "local")
+		if err != nil {
+			panic("Can't find a suitable environment")
+		}
+	}
+}
+
+func initViperConfig() {
+	viper.AddConfigPath("./config")
+	viper.SetConfigName("properties")
+	viper.SetConfigType("yaml")
+	err := viper.ReadInConfig()
+	if err != nil {
+		slog.Error("can't load config", slog.String("error", err.Error()))
+		panic("Can't load config")
 	}
 }
 
@@ -48,17 +62,10 @@ func main() {
 
 func initCreateProductController() controller.CreateProductController {
 	slog.Info("Initializing dependencies for environment " + env)
-	var persistPort outputPort.PersistProductOutputPort
-	productRepository := data.NewProductRepository(*db.BuildDynamoDBConfig(env))
+	productRepository := data.NewProductRepository(*db.BuildDynamoDBConfig())
 	persistAdapter := out.NewPersistProductDynamoOutputAdapter(productRepository)
 	getProductAdapter := out.NewGetProductByNameOutputAdapter(productRepository)
-	persistMock := mocks.PersistProductOutputPortMock{}
-	if env != "local" {
-		persistPort = &persistAdapter
-	} else {
-		persistPort = &persistMock
-	}
-	createProductUseCase := core.NewCreateProductUseCase(persistPort, getProductAdapter)
+	createProductUseCase := core.NewCreateProductUseCase(&persistAdapter, getProductAdapter)
 	return controller.NewCreateProductController(createProductUseCase)
 }
 

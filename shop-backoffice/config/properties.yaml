@@ -1,0 +1,5 @@
+dynamo:
+  table_name: Products
+  gsi_name: gsi_name
+log:
+  add_source: True

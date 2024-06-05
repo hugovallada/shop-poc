@@ -6,11 +6,11 @@ traceId: "30eb2105"
 flowId: "99882992"
 
 {
-    "nome": "NEW",
+    "nome": "Novo Produto",
     "departamento": "Informatica",
     "tags": ["Informatica","Notebook","Acessorios","Home-Office", "Promocao"],
     "preco": 1500000,
-    "quantidade": 9,
+    "quantidade": 100,
     "ativo": true
 }
 

@@ -8,20 +8,21 @@ import (
 	"github.com/aws/aws-sdk-go/service/dynamodb"
 	"github.com/aws/aws-sdk-go/service/dynamodb/dynamodbattribute"
 	"github.com/hugovallada/shop-poc/shop-backoffice/internal/infra/data/model"
-)
-
-const (
-	TABLE_NAME = "Products"
-	GSI        = "gsi_name"
+	"github.com/spf13/viper"
 )
 
 type ProductRepository struct {
-	dynamo dynamodb.DynamoDB
+	dynamo    dynamodb.DynamoDB
+	tableName string
+	gsiName   string
 }
 
 func NewProductRepository(dynamo dynamodb.DynamoDB) ProductRepository {
+	dynamoConfig := viper.GetStringMapString("dynamo")
 	return ProductRepository{
-		dynamo: dynamo,
+		dynamo:    dynamo,
+		tableName: dynamoConfig["table_name"],
+		gsiName:   dynamoConfig["gsi_name"],
 	}
 }
 
@@ -33,7 +34,7 @@ func (pr ProductRepository) SaveProduct(ctx context.Context, productModel model.
 	}
 	slog.InfoContext(ctx, "successfully marshaled productModel into dynamoItemMap", slog.Any("dynamoItem", dynamoItem))
 	_, err = pr.dynamo.PutItem(&dynamodb.PutItemInput{
-		TableName: aws.String(TABLE_NAME),
+		TableName: aws.String(pr.tableName),
 		Item:      dynamoItem,
 	})
 	if err != nil {
@@ -44,8 +45,8 @@ func (pr ProductRepository) SaveProduct(ctx context.Context, productModel model.
 
 func (pr ProductRepository) GetProductsByName(ctx context.Context, name string) ([]model.ProductModel, error) {
 	queryInput := &dynamodb.QueryInput{
-		TableName: aws.String(TABLE_NAME),
-		IndexName: aws.String(GSI),
+		TableName: aws.String(pr.tableName),
+		IndexName: aws.String(pr.gsiName),
 		KeyConditions: map[string]*dynamodb.Condition{
 			"name": {
 				ComparisonOperator: aws.String("EQ"),

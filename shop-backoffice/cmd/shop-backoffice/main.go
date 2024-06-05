@@ -16,6 +16,7 @@ import (
 	"github.com/hugovallada/shop-poc/shop-backoffice/internal/infra/config/db"
 	"github.com/hugovallada/shop-poc/shop-backoffice/internal/infra/config/logs"
 	"github.com/hugovallada/shop-poc/shop-backoffice/internal/infra/data"
+	"github.com/spf13/viper"
 )
 
 var (
@@ -24,9 +25,20 @@ var (
 
 func init() {
 	logs.SetDefaultSlogHandler()
+	initViperConfig()
 	env = os.Getenv("ENVIRONMENT")
 	if env == "" {
 		env = "local"
+	}
+}
+
+func initViperConfig() {
+	viper.AddConfigPath("./config")
+	viper.SetConfigName("properties")
+	viper.SetConfigType("yaml")
+	err := viper.ReadInConfig()
+	if err != nil {
+		panic("Can't load config")
 	}
 }
 

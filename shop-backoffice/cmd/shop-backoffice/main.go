@@ -1,9 +1,14 @@
 package main
 
 import (
+	"context"
 	"log"
 	"log/slog"
+	"net/http"
 	"os"
+	"os/signal"
+	"syscall"
+	"time"
 
 	"github.com/gin-gonic/gin"
 	"github.com/hugovallada/shop-poc/shop-backoffice/internal/core"
@@ -55,9 +60,26 @@ func main() {
 	createProductController := initDependencies()
 	routes.InitRoutes(productsGroup, createProductController)
 	routes.InitActuatorRoutes(healthGroup, initHealthCheckController())
-	if err := router.Run(":8081"); err != nil {
-		log.Fatal(err)
+	server := http.Server{
+		Addr:    ":8081",
+		Handler: router,
 	}
+	go func() {
+		if err := server.ListenAndServe(); err != nil && http.ErrServerClosed != err {
+			log.Fatal(err)
+		}
+	}()
+	stop := make(chan os.Signal, 1)
+	signal.Notify(stop, os.Interrupt, syscall.SIGTERM, syscall.SIGINT)
+	<-stop
+	slog.Info("Shutting down server")
+	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+	defer cancel()
+	if err := server.Shutdown(ctx); err != nil {
+		log.Fatalf("Could not gracefully shutdown the server: %v", err)
+	}
+	slog.Info("Server stopped")
+
 }
 
 func initCreateProductController() controller.CreateProductController {

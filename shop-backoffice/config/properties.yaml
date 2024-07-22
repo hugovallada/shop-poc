@@ -3,3 +3,5 @@ dynamo:
   gsi_name: gsi_name
 log:
   add_source: True
+server:
+  port: :8081

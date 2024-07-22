@@ -61,10 +61,11 @@ func main() {
 	routes.InitRoutes(productsGroup, createProductController)
 	routes.InitActuatorRoutes(healthGroup, initHealthCheckController())
 	server := http.Server{
-		Addr:    ":8081",
+		Addr:    viper.GetString("server.port"),
 		Handler: router,
 	}
 	go func() {
+		log.Printf("Initing server at port %v", server.Addr)
 		if err := server.ListenAndServe(); err != nil && http.ErrServerClosed != err {
 			log.Fatal(err)
 		}
